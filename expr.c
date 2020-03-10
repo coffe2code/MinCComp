@@ -20,6 +20,19 @@ int arithop(int tok) {
 	}
 }
 
+
+// Operator precedence for each token
+static int OpPrec[] = { 0, 10, 5, 15, 20, 0};
+//					  EOF   +   -   *  /   INTLIT
+static int op_precedence(int tokentype) {
+	int prec = OpPrec[tokentype];
+	if (prec == 0) {
+		fprintf(stderr, "syntax error on line %d, token %d\n", Line, tokentype);
+		exit(1);
+	}
+	return prec;
+}
+
 static struct ASTnode *primary(void) {
 	struct ASTnode *n;
 
@@ -34,22 +47,28 @@ static struct ASTnode *primary(void) {
 	}
 }
 
-struct ASTnode *binexpr(void) {
+struct ASTnode *binexpr(int ptp) {
 	struct ASTnode *n, *left, *right;
-	int nodetype;
+	int tokentype;
 
 	left = primary();
 
-	if (Token.token == T_EOF)
+	tokentype = Token.token;
+	if (tokentype == T_EOF)
 		return left;
 
-	nodetype = arithop(Token.token);
+	while(op_precedence(tokentype) > ptp) {
+		scan(&Token);
 
-	scan(&Token);
+		right = binexpr(OpPrec[tokentype]);
 
-	right = binexpr();
+		left = mkastnode(arithop(tokentype), left, right, 0);
 
-	n = mkastnode(nodetype, left, right, 0);
+		tokentype = Token.token;
+		if (tokentype == T_EOF)
+			return left;
+	}
 
-	return n;
+	return left;
 }
+
