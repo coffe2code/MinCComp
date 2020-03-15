@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define TEXTLEN	512
+
 // AST node types
 enum {
 	A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INTLIT
@@ -18,7 +20,7 @@ struct ASTnode {
 
 
 enum {
-	T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT
+	T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT, T_SEMI, T_PRINT
 };
 
 struct token {

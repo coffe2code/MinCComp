@@ -22,7 +22,7 @@ int arithop(int tok) {
 
 
 // Operator precedence for each token
-static int OpPrec[] = { 0, 10, 5, 15, 20, 0};
+static int OpPrec[] = { 0, 10, 10, 20, 20, 0};
 //					  EOF   +   -   *  /   INTLIT
 static int op_precedence(int tokentype) {
 	int prec = OpPrec[tokentype];
@@ -54,7 +54,7 @@ struct ASTnode *binexpr(int ptp) {
 	left = primary();
 
 	tokentype = Token.token;
-	if (tokentype == T_EOF)
+	if (tokentype == T_SEMI)
 		return left;
 
 	while(op_precedence(tokentype) > ptp) {
@@ -65,7 +65,7 @@ struct ASTnode *binexpr(int ptp) {
 		left = mkastnode(arithop(tokentype), left, right, 0);
 
 		tokentype = Token.token;
-		if (tokentype == T_EOF)
+		if (tokentype == T_SEMI)
 			return left;
 	}
 
