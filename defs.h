@@ -4,10 +4,11 @@
 #include <ctype.h>
 
 #define TEXTLEN	512
-
+#define NSYMBOLS 1024
 // AST node types
 enum {
-	A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INTLIT
+	A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INTLIT,
+	A_IDENT, A_LVIDENT, A_ASSIGN
 };
 
 // Abstract Syntax Tree structure
@@ -15,15 +16,25 @@ struct ASTnode {
 	int op;
 	struct ASTnode *left;
 	struct ASTnode *right;
-	int intvalue;
+	union {
+		int intvalue; // For A_INTLIT
+		int id;		  // For A_IDENT
+	} v;
 };
 
 
 enum {
-	T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT, T_SEMI, T_PRINT
+	T_EOF, T_PLUS, T_MINUS, T_STAR, T_SLASH, T_INTLIT, T_SEMI, T_EQUALS, T_IDENT,
+	T_PRINT, T_INT
 };
 
 struct token {
 	int token;
 	int intvalue;
+};
+
+// Symbol Table
+
+struct symtable {
+	char *name;
 };

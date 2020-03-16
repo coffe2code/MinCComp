@@ -76,6 +76,13 @@ int cgload(int value) {
   	return(r);
 }
 
+int cgloadglob(char *identifier) {
+	int r = alloc_register();
+
+	fprintf(Outfile, "\tmovq\t%s(\%%rip), %s\n", identifier, reglist[r]);
+  	return (r);
+}
+
 int cgadd(int r1, int r2) {
 	fprintf(Outfile, "\taddq\t%s, %s\n", reglist[r1], reglist[r2]);
   	free_register(r1);
@@ -107,4 +114,14 @@ void cgprintint(int r) {
   fprintf(Outfile, "\tmovq\t%s, %%rdi\n", reglist[r]);
   fprintf(Outfile, "\tcall\tprintint\n");
   free_register(r);
+}
+
+int cgstorglob(int r, char *identifier) {
+  fprintf(Outfile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r], identifier);
+  return (r);
+}
+
+// Generate a global symbol
+void cgglobsym(char *sym) {
+  fprintf(Outfile, "\t.comm\t%s,8,8\n", sym);
 }
