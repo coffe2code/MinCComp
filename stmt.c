@@ -22,13 +22,12 @@ void assignment_statement(void) {
 	int id;
 
 	ident();
-
 	if((id = findglob(Text)) == -1) {
 		fatals("Undeclared variable", Text);
 	}
 	right = mkastleaf(A_LVIDENT, id);
-
-	match(T_EQUALS, "=");
+	
+	match(T_ASSIGN, "=");
 
 	left = binexpr(0);
 

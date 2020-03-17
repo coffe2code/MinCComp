@@ -5,8 +5,7 @@ comp1: $(SRCS)
 clean:
 	rm -f comp1 *.o *.s out
 
-test: comp1 Tests/input11
-	./comp1 Tests/input11
+test: comp1 Tests/input12
+	./comp1 Tests/input12
 	cc -o out out.s
 	./out
-	
