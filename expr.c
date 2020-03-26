@@ -29,7 +29,6 @@ static int op_precedence(int tokentype) {
 static struct ASTnode *primary(void) {
 	struct ASTnode *n;
 	int id;
-
 	switch(Token.token) {
 		case T_INTLIT:
 			n = mkastleaf(A_INTLIT, Token.intvalue);
@@ -52,22 +51,22 @@ static struct ASTnode *primary(void) {
 struct ASTnode *binexpr(int ptp) {
 	struct ASTnode *n, *left, *right;
 	int tokentype;
-
+    
 	left = primary();
 
 	tokentype = Token.token;
-	if (tokentype == T_SEMI)
-		return left;
+	if (tokentype == T_SEMI || tokentype == T_RPAREN)
+			return left;
 
 	while(op_precedence(tokentype) > ptp) {
 		scan(&Token);
 
 		right = binexpr(OpPrec[tokentype]);
 
-		left = mkastnode(arithop(tokentype), left, right, 0);
+		left = mkastnode(arithop(tokentype), left, NULL, right, 0);
 
 		tokentype = Token.token;
-		if (tokentype == T_SEMI)
+		if (tokentype == T_SEMI || tokentype == T_RPAREN)
 			return left;
 	}
 
