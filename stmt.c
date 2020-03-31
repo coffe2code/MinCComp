@@ -106,7 +106,6 @@ static struct ASTnode *single_statement(void) {
 		case T_PRINT:
 			return print_statement();
 		case T_INT:
-			printf("Hello\n");
 			var_declaration();
 			return NULL;
 		case T_IDENT:
